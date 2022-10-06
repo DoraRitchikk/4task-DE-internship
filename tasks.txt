@@ -1,0 +1,399 @@
+#1 TASK
+
+
+
+from tkinter.tix import COLUMN
+from pyspark.sql import SparkSession
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.jars", "/C:/Users\Dora Ritchik/Downloads/postgresql-42.5.0.jar") \
+    .getOrCreate()
+
+dfFilmCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film_category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+
+dfCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+#dfCategory.join(dfFilmCategory,dfCategory['category_id'] == dfFilmCategory['category_id'],"inner").groupBy(dfCategory['name']).count().show()
+
+
+
+
+
+
+
+
+#2TASK
+from itertools import count
+from tkinter.tix import COLUMN
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.jars", "/C:/Users\Dora Ritchik/Downloads/postgresql-42.5.0.jar") \
+    .getOrCreate()
+
+dfActor = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "actor") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+
+dfFilmActor = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film_actor") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfActor.join(dfFilmActor,dfActor['actor_id'] == dfFilmActor['actor_id'],"inner").groupBy(dfActor['actor_id']).count().sort(col('count').desc()).limit(10).show()
+
+
+
+
+
+
+#3Task
+from itertools import count
+from tkinter.tix import COLUMN
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.jars", "/C:/Users\Dora Ritchik/Downloads/postgresql-42.5.0.jar") \
+    .getOrCreate()
+
+dfCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+
+dfFilmCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film_category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfFilm = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfInventory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "inventory") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfRental = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "rental") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfPayment = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "payment") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfCategory.join(dfFilmCategory,dfCategory['category_id'] == dfFilmCategory['category_id'],"inner"
+).join(dfFilm,dfFilmCategory['film_id'] == dfFilm['film_id'],"inner"
+).join(dfInventory,dfFilm['film_id'] == dfInventory['film_id'],"inner"
+).join(dfRental,dfInventory['inventory_id'] == dfRental['inventory_id'],"inner"
+).join(dfPayment,dfRental['rental_id'] == dfPayment['rental_id'],"inner"
+).groupBy(dfCategory["name"]
+).agg({"amount": "max"}).sort(col('max(amount)').desc()).limit(1).show()
+
+
+
+
+
+
+#4Task
+from itertools import count
+from tkinter.tix import COLUMN
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.jars", "/C:/Users\Dora Ritchik/Downloads/postgresql-42.5.0.jar") \
+    .getOrCreate()
+
+dfFilm = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+
+dfInventory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "inventory") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+
+dfFilm.join(dfInventory,how='left_anti',on=['film_id']).show()
+
+
+
+#5task
+from itertools import count
+from tkinter.tix import COLUMN
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.jars", "/C:/Users\Dora Ritchik/Downloads/postgresql-42.5.0.jar") \
+    .getOrCreate()
+
+dfFilmActor = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film_actor") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+
+dfFilm = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfFilmCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film_category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfFilmActor.join(dfFilm,dfFilmActor['film_id'] == dfFilm['film_id'],"inner"
+).join(dfFilmCategory,dfFilm['film_id'] == dfFilmCategory['film_id'],"inner"
+).join(dfCategory,dfFilmCategory['category_id'] == dfCategory['category_id'],"inner"
+).filter(dfCategory['name'] == 'Children').groupBy(dfFilmActor['actor_id']
+).count().sort(col('count').desc()).dropDuplicates(["count"]).limit(3).show()
+
+
+
+
+
+#6task
+from doctest import DocFileCase
+from itertools import count
+from pickle import FALSE, TRUE
+from tkinter.tix import COLUMN
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.jars", "/C:/Users\Dora Ritchik/Downloads/postgresql-42.5.0.jar") \
+    .getOrCreate()
+
+dfCity = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "city") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+
+dfAddress = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "address") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfCustomer = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "customer") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()    
+
+dfCity.join(dfAddress,dfCity['city_id'] == dfAddress['city_id'],"inner"
+).join(dfCustomer,dfAddress['address_id'] == dfCustomer['address_id'],"inner"
+).groupBy(dfCity['city']).agg({'active' : 'count'}).sort(col('count(active)').desc()).show()
+
+
+
+
+
+#7TASK
+
+from itertools import count
+from tkinter.tix import COLUMN
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+from pyspark.sql import functions as F
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.jars", "/C:/Users\Dora Ritchik/Downloads/postgresql-42.5.0.jar") \
+    .getOrCreate()
+
+dfCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfAddress = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "address") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfCustomer = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "customer") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfPayment = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "payment") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfRental = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "rental") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfInventory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "inventory") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfFilmCategory = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "film_category") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfCity = spark.read \
+    .format("jdbc") \
+    .option("url", "jdbc:postgresql://localhost:5432/postgres") \
+    .option("dbtable", "city") \
+    .option("user", "postgres") \
+    .option("password", "8885Mi7890") \
+    .option("driver", "org.postgresql.Driver") \
+    .load()
+
+dfCity.join(dfAddress,dfCity['city_id'] == dfAddress['city_id'],"inner"
+).join(dfCustomer,dfAddress['address_id'] == dfCustomer['address_id'],"inner"
+).join(dfPayment,dfCustomer['customer_id'] == dfPayment['customer_id'],"inner"
+).join(dfRental,dfPayment['rental_id'] == dfRental['rental_id'],"inner"
+).join(dfInventory,dfRental['inventory_id'] == dfInventory['inventory_id'],"inner"
+).join(dfFilmCategory,dfInventory['film_id'] == dfFilmCategory['film_id'],"inner"
+).join(dfCategory,dfFilmCategory['category_id'] == dfCategory['category_id'],"inner"
+).filter((col('name').like("%-%")) | (col('name').like("A%"))).groupBy(dfCategory["name"]).agg(F.max(dfRental['rental_id'])).sort(col('max(rental_id)').desc()).limit(1).show()
+         
